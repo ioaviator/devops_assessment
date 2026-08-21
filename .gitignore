@@ -1,3 +1,4 @@
 .pytest_*
 __pycache__
 devops_*
+ticket-api*

@@ -1,0 +1,37 @@
+name: Build and push to container environments
+
+on:
+  # Runs directly when application code changes
+  push:
+    branches:
+      - main
+    paths:
+      - 'app/**'
+      - 'Dockerfile'
+      - 'requirements.txt'
+      - 'requirements-dev.txt'
+
+  workflow_dispatch:
+
+
+jobs:
+  build_pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+      
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: 3.13
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Test application
+        run: pytest --quiet
+
