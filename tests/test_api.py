@@ -25,7 +25,7 @@ def test_ticket_crud():
 
     assert created.status_code == 200
 
-    ticket_id = created.json()["id"]
+    ticket_id = created.json()["ticket_id"]
 
 
     # READ

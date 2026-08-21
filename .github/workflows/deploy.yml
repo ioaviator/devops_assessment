@@ -10,6 +10,7 @@ on:
       - 'Dockerfile'
       - 'requirements.txt'
       - 'requirements-dev.txt'
+      - 'tests/**'
 
   workflow_dispatch:
 
