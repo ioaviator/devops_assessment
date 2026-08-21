@@ -28,7 +28,7 @@ class TicketUpdate(BaseModel):
 
 class Ticket(BaseModel):
 
-    id: str
+    ticket_id: str
 
     customer_id: str
 

@@ -30,11 +30,11 @@ def home():
 def create_ticket(ticket: TicketCreate):
 
     new_ticket = Ticket(
-        id=str(uuid4()),
+        ticket_id=str(uuid4()),
         **ticket.model_dump()
     )
 
-    tickets[new_ticket.id] = new_ticket
+    tickets[new_ticket.ticket_id] = new_ticket
 
     return new_ticket
 
@@ -42,8 +42,8 @@ def create_ticket(ticket: TicketCreate):
 # read all tickets
 @app.get("/api/v1/tickets")
 def get_tickets(
-    offset=0,
-    limit=20
+    offset:int=0,
+    limit:int=20
 ):
 
     all_tickets = list(tickets.values())
