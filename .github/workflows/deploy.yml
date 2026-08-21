@@ -39,7 +39,7 @@ jobs:
         run: pytest --quiet
 
       - name: Build Docker image
-        run: docker build --tag "${LOCAL_IMAGE}" .
+        run: docker build --tag "${IMAGE_NAME}" .
 
       - name: Scan Docker image
         uses: aquasecurity/trivy-action@v0.35.0
