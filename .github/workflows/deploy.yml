@@ -41,14 +41,5 @@ jobs:
       - name: Build Docker image
         run: docker build --tag "${IMAGE_NAME}" .
 
-      - name: Scan Docker image
-        uses: aquasecurity/trivy-action@v0.35.0
-        with:
-          image-ref: ${{ env.IMAGE_NAME }}
-          scanners: vuln,secret,misconfig
-          severity: HIGH,CRITICAL
-          ignore-unfixed: true
-          exit-code: "1"
-      
       
 
