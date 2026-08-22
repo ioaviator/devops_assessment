@@ -26,7 +26,12 @@ jobs:
         with:
           terraform_version: "1.14.6"
 
-      
+      - name: 'Terraform init'
+        id: init
+        run: |
+          cd terraform
+          terraform init            
+
       
       - name: 'Terraform destroy'
         id: destroy
