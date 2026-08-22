@@ -4,3 +4,4 @@ devops_*
 ticket-api*
 *.tfstate
 .terraform*
+*.backup
