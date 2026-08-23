@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 from uuid import uuid4
 
 from fastapi import FastAPI, HTTPException, Query
+from prometheus_fastapi_instrumentator import Instrumentator
 
 from app.models import Ticket, TicketCreate, TicketUpdate
 
@@ -12,6 +13,22 @@ app = FastAPI(
     version="1.0"
 )
 
+instrumentator = Instrumentator(
+    should_group_status_codes=False,
+    should_ignore_untemplated=True,
+    should_instrument_requests_inprogress=True,
+    excluded_handlers=[
+        "/metrics",
+        "/health/live",
+        "/health/ready",
+    ],
+)
+
+instrumentator.instrument(app).expose(
+    app,
+    endpoint="/metrics",
+    include_in_schema=False,
+)
 
 # dummy in-memory database
 tickets = {}
@@ -118,9 +135,8 @@ def delete_ticket(ticket_id):
 
 
 
-@app.get("/health/live")
+@app.get("/health/live", include_in_schema=False)
 def health():
-
     return {
         "status": "ok"
     }

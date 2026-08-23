@@ -1,0 +1,57 @@
+volumes:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  ticket_api:
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ticket_api:v1
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app/app:ro   
+    restart: unless-stopped
+    networks:
+      - ticket_api
+
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    container_name: prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=7d
+      - --web.enable-lifecycle
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    depends_on:
+      - api
+    networks:
+      - ticket_api
+
+  grafana:
+    image: grafana/grafana:12.0
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+    networks:
+      - ticket_api
