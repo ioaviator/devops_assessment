@@ -11,3 +11,9 @@ variable "ecs_execution_role_arn" {
 variable "ecs_task_role_arn" {
   type = string
 }
+
+variable "public_subnet" {
+}
+
+variable "security_group" {
+}

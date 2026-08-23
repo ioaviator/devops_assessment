@@ -6,7 +6,7 @@ resource "aws_ecs_cluster" "main" {
 
 # ecs task definition
 resource "aws_ecs_task_definition" "ticket_api" {
-  family                   = "ticket_api-task"
+  family                   = "ticket_api_task"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = "256"
@@ -46,18 +46,17 @@ resource "aws_ecs_task_definition" "ticket_api" {
 }
 
 # ecs service
-# resource "aws_ecs_service" "ticket_api_service" {
-#   name            = "ticket_api_service"
-#   cluster         = aws_ecs_cluster.main.id
-#   task_definition = aws_ecs_task_definition.ticket_api.arn
-#   launch_type     = "FARGATE"
-#   desired_count   = 1
+resource "aws_ecs_service" "ticket_api_service" {
+  name            = "ticket_api_service"
+  cluster         = aws_ecs_cluster.main.id
+  task_definition = aws_ecs_task_definition.ticket_api.arn
+  launch_type     = "FARGATE"
+  desired_count   = 1
 
-#   network_configuration {
-#     subnets          = [aws_subnet.public.id]
-#     security_groups  = [aws_security_group.ecs_sg.id]
-#     assign_public_ip = true
-#   }
+  network_configuration {
+    subnets          = [var.public_subnet]
+    security_groups  = [var.security_group]
+    assign_public_ip = true
+  }
 
-#   depends_on = [aws_iam_role_policy_attachment.ecs_execution_policy]
-# }
+}
