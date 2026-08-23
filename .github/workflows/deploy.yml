@@ -84,7 +84,15 @@ jobs:
       - name: push image to aws ecr
         id: build-image
         run: |
-          docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+          # define registry variables
+          REGISTRY_URL="${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}"
+          
+          # tag the built local image as latest
+          docker tag $REGISTRY_URL:${{ github.sha }} $REGISTRY_URL:latest
+          
+          # push to ECR
+          docker push $REGISTRY_URL:${{ github.sha }}
+          docker push $REGISTRY_URL:latest
       
   deploy:
     name: Production Rollout to ECS
