@@ -18,6 +18,7 @@ env:
   ECS_SERVICE: ticket_api_service
   ECS_CLUSTER: ticket_api_cluster
   CONTAINER_NAME: ticket-api  
+  ECS_TASK_DEF_FAMILY: ticket_api_task
 
 jobs:
   test:
@@ -112,7 +113,7 @@ jobs:
       - name: download active task definition
         run: |
           aws ecs describe-task-definition \
-            --task-definition ${{ env.ECS_SERVICE }} \
+            --task-definition ${{ env.ECS_TASK_DEF_FAMILY }} \
             --query taskDefinition > task-def.json
 
       - name: fill in the new image id in the aws ecs task definition
