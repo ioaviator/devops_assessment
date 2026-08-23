@@ -10,6 +10,7 @@ on:
       - 'requirements.txt'
       - 'requirements-dev.txt'
       - 'tests/**'
+      - '.github/workflows/**'
   workflow_dispatch:
 
 env:
@@ -17,7 +18,7 @@ env:
   ECR_REPOSITORY: ticket_api
   ECS_SERVICE: ticket_api_service
   ECS_CLUSTER: ticket_api_cluster
-  CONTAINER_NAME: ticket-api  
+  CONTAINER_NAME: ticket_api  
   ECS_TASK_DEF_FAMILY: ticket_api_task
 
 jobs:
