@@ -21,7 +21,7 @@ RUN addgroup --system --gid 10001 devops && \
   adduser --system --uid 10001 --ingroup devops devops
 
 COPY --from=builder --chown=devops:devops /opt/venv /opt/venv
-COPY --chown=devops:devops ./app .
+COPY --chown=devops:devops ./app ./app
 
 ENV PATH="/opt/venv/bin:$PATH"
 
