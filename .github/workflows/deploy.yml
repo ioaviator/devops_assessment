@@ -1,4 +1,4 @@
-name: Test, build and push to container environments
+name: test, build and push to container environments
 
 on:
   push:
@@ -11,6 +11,11 @@ on:
       - 'requirements-dev.txt'
       - 'tests/**'
       - '.github/workflows/**'
+  workflow_run:
+    workflows: ["terraform resource deployment"]
+    types:
+      - completed
+
   workflow_dispatch:
 
 env:
@@ -25,6 +30,9 @@ jobs:
   test:
     name: run unit tests
     runs-on: ubuntu-latest
+    
+    if: ${{github.event.workflow_run.conclusion == 'success' || github.event_name == 'push'}}
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v7
@@ -132,5 +140,4 @@ jobs:
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
-          # trigger the rollback if things get stuck for over 5 mins
-          timeout-minutes: 5 
+          
