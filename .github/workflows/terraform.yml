@@ -18,21 +18,29 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v7
+
+      - name: scan repository
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: vuln,secret,misconfig
+          severity: CRITICAL
+          exit-code: "1"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: "1.14.6"
 
-      - name: 'Terraform init'
+      - name: 'terraform init'
         id: init
         run: |
           cd terraform
           terraform init            
 
-      - name: 'Terraform apply'
+      - name: 'terraform apply'
         id: apply
         run: |
           cd terraform
