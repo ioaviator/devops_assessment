@@ -12,7 +12,7 @@ services:
       dockerfile: Dockerfile
     image: ticket_api:v1
     ports:
-      - "8000:8000"
+      - "8000:8080"
     volumes:
       - ./app:/app/app:ro   
     restart: unless-stopped
