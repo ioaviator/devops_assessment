@@ -147,6 +147,32 @@ Push code to github repo
 # You can also trigger workflow manually using the `run workflow` option in the actions
 ```
 
+Fetch ecs application public ip address
+```bash
+TASK_ARN=$(aws ecs list-tasks \
+  --cluster ecs_cluster_name \
+  --service-name ecs_service_name \
+  --desired-status RUNNING \
+  --query 'taskArns[0]' \
+  --output text)
+
+
+ENI_ID=$(aws ecs describe-tasks \
+  --cluster ecs_cluster_name \
+  --tasks "$TASK_ARN" \
+  --query 'tasks[0].attachments[0].details[?name==`networkInterfaceId`].value | [0]' \
+  --output text)
+
+aws ec2 describe-network-interfaces \
+  --network-interface-ids "$ENI_ID"  \
+  --query 'NetworkInterfaces[0].Association.PublicIp' \
+  --output text
+```
+Go-To application address
+```bash
+  <ip-address>:8080
+``` 
+
 ## Monitor application
 monitoring is done locally using docker containers 
 
