@@ -171,6 +171,7 @@ aws ec2 describe-network-interfaces \
 Go-To application address
 ```bash
   <ip-address>:8080
+  <ip-address>:8080/docs
 ``` 
 
 ## Monitor application
