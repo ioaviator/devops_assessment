@@ -1,8 +1,8 @@
 terraform {
   backend "s3" {
-    bucket       = "ticket-api-terraform-bucket"
+    bucket       = var.s3_remote_bucket
     key          = "global/s3/terraform.tfstate"
-    region       = "eu-north-1"
+    region       = var.region
     encrypt      = true
     use_lockfile = true
   }
