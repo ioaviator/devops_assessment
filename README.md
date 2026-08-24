@@ -94,18 +94,18 @@ Create an AWS s3 remote backend bucket to be used to manage terraform state
 
 ```
 
-  Inside the terraform directory, add your bucket name and region in the variables.tf file
+  Inside the terraform directory, add your bucket name and region in the backend.tf file
   
   ```bash
-  variable "s3_remote_bucket" {
-  type = string
-  default = "s3 bucket name"
+terraform {
+  backend "s3" {
+    bucket       = "[terraform-bucket]"
+    key          = "global/s3/terraform.tfstate"
+    region       = "[region]"
+    encrypt      = true
+    use_lockfile = true
   }
-
-  variable "region" {
-    type = string
-    default = "region"
-  }
+}
 ```
 
 Create aws resources
